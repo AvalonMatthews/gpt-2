@@ -1,105 +1,40 @@
+**Status:** Archive (code is provided as-is, no updates expected)
+
 # gpt-2
 
-Code and samples from the paper ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf).
+Code and models from the paper ["Language Models are Unsupervised Multitask Learners"](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf).
 
-For now, we have only released a smaller (117M parameter) version of GPT-2.
+You can read about GPT-2 and its staged release in our [original blog post](https://blog.openai.com/better-language-models/), [6 month follow-up post](https://openai.com/blog/gpt-2-6-month-follow-up/), and [final post](https://www.openai.com/blog/gpt-2-1-5b-release/).
 
-See more details in our [blog post](https://blog.openai.com/better-language-models/).
+We have also [released a dataset](https://github.com/openai/gpt-2-output-dataset) for researchers to study their behaviors.
 
-## Installation
-
-Git clone this repository, and `cd` into directory for remaining commands
-```
-git clone https://github.com/openai/gpt-2.git && cd gpt-2
-```
-
-Then, follow instructions for either native or Docker installation.
-
-### Native Installation
-
-Download the model data
-```
-sh download_model.sh 117M
-```
-
-The remaining steps can optionally be done in a virtual environment using tools such as `virtualenv` or `conda`.
-
-Install tensorflow 1.12 (with GPU support, if you have a GPU and want everything to run faster)
-```
-pip3 install tensorflow==1.12.0
-```
-or
-```
-pip3 install tensorflow-gpu==1.12.0
-```
-
-Install other python packages:
-```
-pip3 install -r requirements.txt
-```
-
-### Docker Installation
-
-Build the Dockerfile and tag the created image as `gpt-2`:
-```
-docker build --tag gpt-2 -f Dockerfile.gpu . # or Dockerfile.cpu
-```
-
-Start an interactive bash session from the `gpt-2` docker image.
-
-You can opt to use the `--runtime=nvidia` flag if you have access to a NVIDIA GPU
-and a valid install of [nvidia-docker 2.0](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)).
-```
-docker run --runtime=nvidia -it gpt-2 bash
-```
+<sup>*</sup> *Note that our original parameter counts were wrong due to an error (in our previous blog posts and paper).  Thus you may have seen small referred to as 117M and medium referred to as 345M.*
 
 ## Usage
 
-| WARNING: Samples are unfiltered and may contain offensive content. |
-| --- |
+This repository is meant to be a starting point for researchers and engineers to experiment with GPT-2.
 
-Some of the examples below may include Unicode text characters. Set the environment variable:
-```
-export PYTHONIOENCODING=UTF-8
-```
-to override the standard stream settings in UTF-8 mode.
+For basic information, see our [model card](./model_card.md).
 
-### Unconditional sample generation
+### Some caveats
 
-To generate unconditional samples from the small model:
-```
-python3 src/generate_unconditional_samples.py | tee /tmp/samples
-```
-There are various flags for controlling the samples:
-```
-python3 src/generate_unconditional_samples.py --top_k 40 --temperature 0.7 | tee /tmp/samples
-```
+- GPT-2 models' robustness and worst case behaviors are not well-understood.  As with any machine-learned model, carefully evaluate GPT-2 for your use case, especially if used without fine-tuning or in safety-critical applications where reliability is important.
+- The dataset our GPT-2 models were trained on contains many texts with [biases](https://twitter.com/TomerUllman/status/1101485289720242177) and factual inaccuracies, and thus GPT-2 models are likely to be biased and inaccurate as well.
+- To avoid having samples mistaken as human-written, we recommend clearly labeling samples as synthetic before wide dissemination.  Our models are often incoherent or inaccurate in subtle ways, which takes more than a quick read for a human to notice.
 
-To check flag descriptions, use:
-```
-python3 src/generate_unconditional_samples.py -- --help
-```
+### Work with us
 
-### Conditional sample generation
+Please [let us know](mailto:languagequestions@openai.com) if you’re doing interesting research with or working on applications of GPT-2!  We’re especially interested in hearing from and potentially working with those who are studying
+- Potential malicious use cases and defenses against them (e.g. the detectability of synthetic text)
+- The extent of problematic content (e.g. bias) being baked into the models and effective mitigations
 
-To give the model custom prompts, you can use:
-```
-python3 src/interactive_conditional_samples.py --top_k 40
-```
+## Development
 
-To check flag descriptions, use:
-```
-python3 src/interactive_conditional_samples.py -- --help
-```
+See [DEVELOPERS.md](./DEVELOPERS.md)
 
-## GPT-2 samples
+## Contributors
 
-| WARNING: Samples are unfiltered and may contain offensive content. |
-| --- |
-
-While we have not yet released GPT-2 itself, you can see some samples from it in the `gpt-2-samples` folder.
-We show unconditional samples with default settings (temperature 1 and no truncation), with temperature 0.7, and with truncation with top_k 40.
-We show conditional samples, with contexts drawn from `WebText`'s test set, with default settings (temperature 1 and no truncation), with temperature 0.7, and with truncation with top_k 40.
+See [CONTRIBUTORS.md](./CONTRIBUTORS.md)
 
 ## Citation
 
@@ -120,4 +55,4 @@ We are still considering release of the larger models.
 
 ## License
 
-MIT
+[Modified MIT](./LICENSE)
